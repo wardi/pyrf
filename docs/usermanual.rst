@@ -85,3 +85,13 @@ If ``--reset`` is used the WSA will be reset to defaults before the GUI
 appears.
 
 .. seealso:: :ref:`gui-source`
+
+Building a Windows EXE
+~~~~~~~~~~~~~~~~~~~~~~
+
+Use py2exe::
+
+   python setup.py py2exe
+
+End users require http://www.microsoft.com/en-us/download/details.aspx?id=29
+
