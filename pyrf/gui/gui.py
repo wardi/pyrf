@@ -166,6 +166,11 @@ class MainPanel(QtGui.QWidget):
         span, rbw = self._span_rbw_controls()
         grid.addWidget(span, y, 1, 1, 2)
         grid.addWidget(rbw, y, 3, 1, 2)
+        y += 1
+        fshift = self._fshift_controls()
+        grid.addWidget(QtGui.QLabel('fshift:'), y, 1, 1, 1)
+        grid.addWidget(fshift, y, 2, 1, 2)
+        grid.addWidget(QtGui.QLabel('Hz'), y, 4, 1, 1)
 
         self.setLayout(grid)
         self.show()
@@ -343,6 +348,25 @@ class MainPanel(QtGui.QWidget):
 
         return span, rbw
 
+    def _fshift_controls(self):
+        fshift = QtGui.QLineEdit("")
+        self._fshift_edit = fshift
+        self._read_update_fshift_edit()
+        def write_fshift():
+            try:
+                f = float(fshift.text())
+            except ValueError:
+                return
+            with self.paused_stream() as dut:
+                dut.fshift(f)
+        fshift.editingFinished.connect(write_fshift)
+        return fshift
+    
+    @inlineCallbacks
+    def _read_update_fshift_edit(self):
+        "Get current frequency from self.dut and update the edit box"
+        fshift = yield self.dut.fshift()
+        self._fshift_edit.setText("%0.1f" % fshift)
 
     def set_freq_mhz(self, f):
         self.center_freq = f * 1e6
