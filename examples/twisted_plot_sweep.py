@@ -14,6 +14,8 @@ import numpy as np
 from twisted.internet import reactor, defer
 import twisted.python.log
 
+done = []
+
 def plot_sweep(fstart, fstop, bins):
     # setup my graph
     fig = figure(1)
@@ -27,13 +29,15 @@ def plot_sweep(fstart, fstop, bins):
 
     # show graph
     show()
-    reactor.callLater(2 ** -4, reactor.stop)
+    done.append(1)
+    if len(done) > 3:
+        reactor.callLater(2 ** -4, reactor.stop)
 
 def start_sweep(v):
     global sd
     sd = SweepDevice(dut, plot_sweep)
     sd.capture_power_spectrum(0e9, 10e9, 2000,
-        {'gain': 'high', 'antenna': 1})
+        {'gain': 'high', 'antenna': 1}, continuous=True)
 
 # connect to wsa
 dut = WSA4000(connector=TwistedConnector(reactor))
