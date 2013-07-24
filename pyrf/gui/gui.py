@@ -95,6 +95,7 @@ class MainPanel(QtGui.QWidget):
         self._plot = plot(self)
         self._vrt_context = {}
         self.initUI()
+        cu._load_playback_dir(self)
         self.disable_controls()
         self._reactor = self._get_reactor()
 
@@ -148,12 +149,22 @@ class MainPanel(QtGui.QWidget):
 
 
     def receive_data(self, fstart, fstop, pow_):
+        if self.plot_state.playback_enable:
+            start, stop, pow_ = self.plot_state.playback.read_data()
+            self.plot_state.update_freq_set(fstart = start, fstop = stop)
+            self.update_freq_edit()
+            
         if not self.plot_state.enable_plot:
             return
         if self.plot_state.trig_set:
             self.read_trigg()
         else:
             self.read_sweep()
+        
+        if self.plot_state.playback_record:
+            print 'got here'
+            self.plot_state.playback.save_data(fstart,fstop,pow_)
+            
         self.pow_data = pow_
         self.update_plot()
 
@@ -569,7 +580,21 @@ class MainPanel(QtGui.QWidget):
         playback_layout = QtGui.QVBoxLayout()
         first_row = QtGui.QHBoxLayout()
         first_row.addWidget(self._load_playback_dir())
+        first_row.addWidget(self._remove_playback_item())
+        
+        second_row = QtGui.QHBoxLayout()
+        second_row.addWidget(self._playback_play())
+        second_row.addWidget(self._playback_stop())
+        second_row.addWidget(self._playback_record())
+        second_row.addWidget(self._playback_forward())
+        second_row.addWidget(self._playback_rewind())
+
+        third_row = QtGui.QHBoxLayout()
+        third_row.addWidget(self._playback_list())
+        
         playback_layout.addLayout(first_row)
+        playback_layout.addLayout(second_row)
+        playback_layout.addLayout(third_row)
         playback_group.setLayout(playback_layout)
         return playback_group
         
@@ -585,10 +610,45 @@ class MainPanel(QtGui.QWidget):
     def _remove_playback_item(self):
         load = QtGui.QPushButton('Remove Playback File')
         load.setToolTip("Remove a playback file from the list bellow (the file will not be deleted from the computer") 
-        load.clicked.connect(lambda: cu._enable_plot(self))
+        load.clicked.connect(lambda: cu._remove_file(self))
         self._load = load
         self.control_widgets.append(self._load)
         return load
+    
+    def _playback_play(self):
+        play = QtGui.QPushButton('Play')
+        play.clicked.connect(lambda: cu._play_file(self))
+        self._play = play
+        return play
+    
+    def _playback_record(self):
+        record = QtGui.QPushButton('Record')
+        record.clicked.connect(lambda: cu._record_data(self))
+        self._record = record
+        return record
+        
+    def _playback_stop(self):
+        stop = QtGui.QPushButton('Stop')
+        stop.clicked.connect(lambda: cu._play_file(self))
+        self._stop = stop
+        return stop
+        
+    def _playback_forward(self):
+        forward = QtGui.QPushButton('forward')
+        forward.clicked.connect(lambda: cu._play_file(self))
+        self.forward = forward
+        return forward
+        
+    def _playback_rewind(self):
+        rewind = QtGui.QPushButton('rewind')
+        rewind.clicked.connect(lambda: cu._play_file(self))
+        self._rewind = rewind
+        return rewind
+        
+    def _playback_list(self):
+        playback_list = QtGui.QListWidget()
+        self._playback_list = playback_list
+        return playback_list
     
     def _marker_labels(self):
         marker_label = QtGui.QLabel('')

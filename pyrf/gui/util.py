@@ -1,4 +1,4 @@
-
+import os
 import  control_util 
 import numpy as np
 import constants
@@ -51,7 +51,22 @@ def find_nearest_index(value, array):
     """
     idx = (np.abs(array-value)).argmin()
     return idx
-    
+def update_playback_list(layout):
+
+    data_files = [(x[0], x[2]) for x in os.walk(layout.plot_state.playback_dir)]
+
+    if (data_files):
+        layout.plot_state.playback_file_list = data_files[0][1]
+
+        layout._playback_list.clear()
+        for name in layout.plot_state.playback_file_list:
+            if 'csv' in name and (name not in layout.plot_state.playback_ignore_list):
+                file = open(layout.plot_state.playback_dir + '\\' + name, 'r')
+                header = file.readline()
+                if 'Pyrf' in header: 
+                    layout._playback_list.addItem(name)
+            layout._playback_list.setCurrentRow(0)
+            
 def select_fstart(layout):
     layout._fstart.setStyleSheet('background-color: %s; color: white;' % constants.ORANGE)
     layout._cfreq.setStyleSheet("")

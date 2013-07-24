@@ -170,6 +170,42 @@ def _trigger_control(layout):
     else:
         layout.plot_state.enable_trig(layout)
         _select_center_freq(layout)
+
+def _load_playback_dir(layout):
+    util.update_playback_list(layout)
+
+def _remove_file(layout):
+    if layout._playback_list.count() != 0:
+        list_item = layout._playback_list.currentItem()
+        layout.plot_state.playback_ignore_list.append(list_item.text())
+        layout._playback_list.takeItem(layout._playback_list.currentRow())
+
+def _play_file(layout):
+    layout.plot_state.playback_enable = not layout.plot_state.playback_enable
+    if layout.plot_state.playback_enable:
+        if layout._playback_list.count() != 0: 
+            util.change_item_color(layout._play,  constants.ORANGE, constants.WHITE)
+
+            layout.plot_state.selected_playback = layout._playback_list.currentItem()
+            file_name = layout.plot_state.playback_dir + '\\' + layout.plot_state.selected_playback.text()
+            layout.plot_state.playback.open_file(file_name)
+        else:
+            layout.plot_state.playback_enable = False
+    else:
+        util.change_item_color(layout._play,  constants.NORMAL_COLOR, constants.BLACK)
+        layout._play.setText('Play File')
+        if layout.plot_state.playback.file_opened:
+            layout.plot_state.playback.file_opened = False
+            
+def _record_data(layout):
+    layout.plot_state.playback_record = not layout.plot_state.playback_record
+    if layout.plot_state.playback_record: 
+        util.change_item_color(layout._record,  constants.ORANGE, constants.WHITE)
+        layout.plot_state.playback.create_file()
+    else:
+        util.change_item_color(layout._record,  constants.NORMAL_COLOR, constants.BLACK)
+        layout.plot_state.playback.close_file()
+        util.update_playback_list(layout)
         
 hotkey_dict = {'1': _select_fstart,
                 '2': _select_center_freq,
