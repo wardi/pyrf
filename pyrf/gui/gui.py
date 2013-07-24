@@ -207,12 +207,13 @@ class MainPanel(QtGui.QWidget):
         grid.addWidget(self._freq_controls(), y, x, 4, 5)
         y += 4
         grid.addWidget(self._plot_controls(), y, x, 4, 5)
-
+        
+        y += 4
+        grid.addWidget(self._playback_control(), y, x, 4, 5)
+        
         self.update_freq()
         self.setLayout(grid)
 
-        
-    
     def _device_controls(self):
         dev_group = QtGui.QGroupBox("Device Control")
         self.dev_group = dev_group
@@ -560,6 +561,35 @@ class MainPanel(QtGui.QWidget):
         self._pause = pause
         self.control_widgets.append(self._pause)
         return pause
+    
+    def _playback_control(self):
+        playback_group = QtGui.QGroupBox("Playback")
+        self._playback_group = playback_group
+        
+        playback_layout = QtGui.QVBoxLayout()
+        first_row = QtGui.QHBoxLayout()
+        first_row.addWidget(self._load_playback_dir())
+        playback_layout.addLayout(first_row)
+        playback_group.setLayout(playback_layout)
+        return playback_group
+        
+        
+    def _load_playback_dir(self):
+        load = QtGui.QPushButton('Load Directory')
+        load.setToolTip("Load Playback file directory (default: /Playback)") 
+        load.clicked.connect(lambda: cu._enable_plot(self))
+        self._load = load
+        self.control_widgets.append(self._load)
+        return load
+        
+    def _remove_playback_item(self):
+        load = QtGui.QPushButton('Remove Playback File')
+        load.setToolTip("Remove a playback file from the list bellow (the file will not be deleted from the computer") 
+        load.clicked.connect(lambda: cu._enable_plot(self))
+        self._load = load
+        self.control_widgets.append(self._load)
+        return load
+    
     def _marker_labels(self):
         marker_label = QtGui.QLabel('')
         marker_label.setStyleSheet('color: %s;' % constants.TEAL)
