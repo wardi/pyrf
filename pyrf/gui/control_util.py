@@ -183,6 +183,7 @@ def _remove_file(layout):
 def _play_file(layout):
     layout.plot_state.playback_enable = not layout.plot_state.playback_enable
     if layout.plot_state.playback_enable:
+
         if layout._playback_list.count() != 0: 
             util.change_item_color(layout._play,  constants.ORANGE, constants.WHITE)
 
@@ -192,6 +193,7 @@ def _play_file(layout):
         else:
             layout.plot_state.playback_enable = False
     else:
+        layout.read_sweep()
         util.change_item_color(layout._play,  constants.NORMAL_COLOR, constants.BLACK)
         layout._play.setText('Play File')
         if layout.plot_state.playback.file_opened:

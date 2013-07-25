@@ -146,25 +146,24 @@ class MainPanel(QtGui.QWidget):
         device_set['trigger'] = self.plot_state.trig_set
 
         self.cap_dut.capture_power_spectrum(device_set,self.plot_state.bin_size)
+            
+    def receive_data(self, fstart = None, fstop = None, pow_ = None):
 
-
-    def receive_data(self, fstart, fstop, pow_):
+        if not self.plot_state.enable_plot:
+            return
+        
         if self.plot_state.playback_enable:
             start, stop, pow_ = self.plot_state.playback.read_data()
             self.plot_state.update_freq_set(fstart = start, fstop = stop)
             self.update_freq_edit()
-            
-        if not self.plot_state.enable_plot:
-            return
-        if self.plot_state.trig_set:
+            self._reactor.callLater(0, self.receive_data)
+        elif self.plot_state.trig_set:
             self.read_trigg()
         else:
             self.read_sweep()
         
         if self.plot_state.playback_record:
-            print 'got here'
             self.plot_state.playback.save_data(fstart,fstop,pow_)
-            
         self.pow_data = pow_
         self.update_plot()
 
@@ -668,7 +667,8 @@ class MainPanel(QtGui.QWidget):
         return marker_label,delta_label, diff_label
         
     def update_plot(self):
-       
+        if self.pow_data is None:
+            return
         self.plot_state.update_freq_range(self.plot_state.fstart,
                                               self.plot_state.fstop , 
                                               len(self.pow_data))

@@ -22,7 +22,9 @@ class playBack(object):
         self.csv_reader = []
         self.number_lines = 0
         self.file_name = None
-    
+    def set_callback(self, callback):
+        self.callback = callback
+        
     def make_header (self,start,stop):
         return [[str(start), str(stop), 'Pyrf', sys.byteorder]]
     
@@ -89,4 +91,4 @@ class playBack(object):
             return start,stop, data
         else:
             self.callback(start,stop,data)
-            return
+            return 
