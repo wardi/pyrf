@@ -22,24 +22,23 @@ class playBack(object):
         self.csv_reader = []
         self.number_lines = 0
         self.file_name = None
-    def set_callback(self, callback):
-        self.callback = callback
         
     def make_header (self,start,stop):
+        print 'make header'
         return [[str(start), str(stop), 'Pyrf', sys.byteorder]]
     
-    def create_file(self, fileName = None):
+    def create_file(self, dir, fileName = None):
+        print 'make file'
         if fileName == None:
-            fileName = 'Playback Captures' + '//' + str(datetime.datetime.now()) 
-            fileName = fileName.replace(':', '-')
-            fileName = fileName.replace('.', '-')
-            fileName = fileName + '.csv'
-        self.file = open(fileName, 'wb')
+            fileName =  str(datetime.datetime.now()).replace('.', '-')
+            fileName = fileName.replace(':','-')
+            fileName = dir + '\\' + fileName + '.csv'
+        self.file = open(fileName, 'w')
         self.csv_writer = csv.writer(self.file)
         self.file_opened = True
         
     def save_data(self, start, stop, data):
-        
+        print 'save data'
         if self.file_opened:
             header = self.make_header(start,stop)
             
@@ -50,6 +49,7 @@ class playBack(object):
             self.csv_writer.writerow([b64])
         
     def close_file(self):
+        print 'close file'
         self.file_opened = False
         self.file.close()
         self.csv_writer = None
@@ -57,11 +57,13 @@ class playBack(object):
         self.curr_index = 0
 
     def open_file(self, fileName):
+        print 'open file'
         self.file_name = fileName
         self.curr_index = 0
         
     def read_data(self):
-        file = open(self.file_name, 'rb')
+        print 'read data'
+        file = open(self.file_name, 'r')
         num_lines = 0
         for i, line in enumerate(file):
 
@@ -87,8 +89,4 @@ class playBack(object):
         if self.curr_index >= num_lines:
             self.curr_index = 0
         file.close()
-        if self.callback == None:
-            return start,stop, data
-        else:
-            self.callback(start,stop,data)
-            return 
+        return start,stop, data

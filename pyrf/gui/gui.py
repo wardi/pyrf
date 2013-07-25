@@ -151,7 +151,7 @@ class MainPanel(QtGui.QWidget):
 
         if not self.plot_state.enable_plot:
             return
-        
+
         if self.plot_state.playback_enable:
             start, stop, pow_ = self.plot_state.playback.read_data()
             self.plot_state.update_freq_set(fstart = start, fstop = stop)
@@ -212,14 +212,14 @@ class MainPanel(QtGui.QWidget):
  
         y = 0
         x = plot_width
-        grid.addWidget(self._device_controls(), y, x, 2, 5)
+        grid.addWidget(self._device_controls(), y, x, 2, 4)
         y += 2
-        grid.addWidget(self._freq_controls(), y, x, 4, 5)
-        y += 4
-        grid.addWidget(self._plot_controls(), y, x, 4, 5)
+        grid.addWidget(self._freq_controls(), y, x, 5, 4)
+        y += 5
+        grid.addWidget(self._plot_controls(), y, x, 4, 4)
         
         y += 4
-        grid.addWidget(self._playback_control(), y, x, 4, 5)
+        grid.addWidget(self._playback_control(), y, x, 4, 4)
         
         self.update_freq()
         self.setLayout(grid)
@@ -600,8 +600,8 @@ class MainPanel(QtGui.QWidget):
         
     def _load_playback_dir(self):
         load = QtGui.QPushButton('Load Directory')
-        load.setToolTip("Load Playback file directory (default: /Playback)") 
-        load.clicked.connect(lambda: cu._enable_plot(self))
+        load.setToolTip("Load Playback file directory") 
+        load.clicked.connect(lambda: cu._change_playback_dir(self))
         self._load = load
         self.control_widgets.append(self._load)
         return load
@@ -615,7 +615,10 @@ class MainPanel(QtGui.QWidget):
         return load
     
     def _playback_play(self):
-        play = QtGui.QPushButton('Play')
+        icon = QtGui.QIcon("Icons\Play.svg");
+        play = QtGui.QPushButton()
+        play.setIcon(icon) 
+        play.setIconSize(QtCore.QSize(50,50));        
         play.clicked.connect(lambda: cu._play_file(self))
         self._play = play
         return play
@@ -628,19 +631,19 @@ class MainPanel(QtGui.QWidget):
         
     def _playback_stop(self):
         stop = QtGui.QPushButton('Stop')
-        stop.clicked.connect(lambda: cu._play_file(self))
+        stop.clicked.connect(lambda: cu._stop_file(self))
         self._stop = stop
         return stop
         
     def _playback_forward(self):
         forward = QtGui.QPushButton('forward')
-        forward.clicked.connect(lambda: cu._play_file(self))
+        forward.clicked.connect(lambda: cu._forward_file(self))
         self.forward = forward
         return forward
         
     def _playback_rewind(self):
         rewind = QtGui.QPushButton('rewind')
-        rewind.clicked.connect(lambda: cu._play_file(self))
+        rewind.clicked.connect(lambda: cu._rewind_file(self))
         self._rewind = rewind
         return rewind
         

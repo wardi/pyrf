@@ -42,7 +42,6 @@ class plot_state(object):
         self.playback_enable = False
         self.playback_file_list = None
         self.playback_dir = os.getcwd() + '\Playback Captures'
-        self.selected_playback = None
         self.playback_record = False
         self.playback_ignore_list = []
         

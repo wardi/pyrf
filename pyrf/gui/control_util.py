@@ -1,9 +1,11 @@
+from PySide import QtGui
 from pyrf.config import TriggerSettings
 import util
 import pyqtgraph as pg
 import gui_config as gui_state
 import constants
 from pyrf.util import read_data_and_context
+
 def _center_plot_view(layout):
     """
     move the view to the center of the current FFT displayed
@@ -147,6 +149,7 @@ def _find_peak(layout):
         layout.update_delta()
         layout.plot_state.delta_ind = peak
     layout.update_diff()
+    
 def _enable_plot(layout):
     """
     pause/unpause the plot
@@ -174,6 +177,11 @@ def _trigger_control(layout):
 def _load_playback_dir(layout):
     util.update_playback_list(layout)
 
+def _change_playback_dir(layout):
+
+    layout.plot_state.playback_dir = QtGui.QFileDialog.getExistingDirectory()
+    util.update_playback_list(layout)
+    
 def _remove_file(layout):
     if layout._playback_list.count() != 0:
         list_item = layout._playback_list.currentItem()
@@ -183,27 +191,49 @@ def _remove_file(layout):
 def _play_file(layout):
     layout.plot_state.playback_enable = not layout.plot_state.playback_enable
     if layout.plot_state.playback_enable:
-
         if layout._playback_list.count() != 0: 
-            util.change_item_color(layout._play,  constants.ORANGE, constants.WHITE)
-
             layout.plot_state.selected_playback = layout._playback_list.currentItem()
             file_name = layout.plot_state.playback_dir + '\\' + layout.plot_state.selected_playback.text()
             layout.plot_state.playback.open_file(file_name)
+            if not layout.plot_state.enable_plot:
+                layout.plot_state.enable_plot = True
+                layout.receive_data()
         else:
+
             layout.plot_state.playback_enable = False
     else:
-        layout.read_sweep()
-        util.change_item_color(layout._play,  constants.NORMAL_COLOR, constants.BLACK)
-        layout._play.setText('Play File')
-        if layout.plot_state.playback.file_opened:
-            layout.plot_state.playback.file_opened = False
-            
+        layout.plot_state.enable_plot = False
+
+
+def _stop_file(layout):
+    layout.plot_state.playback_enable = False
+    if not layout.plot_state.enable_plot:
+                layout.plot_state.enable_plot = True
+    layout.read_sweep()
+    if layout.plot_state.playback.file_opened:
+        layout.plot_state.playback.file_opened = False
+        
+def _forward_file(layout):
+    if layout.plot_state.playback_enable:
+        layout.plot_state.enable_plot = True
+        layout.receive_data()
+        layout.plot_state.enable_plot = False
+    
+def _rewind_file(layout):
+    if layout.plot_state.playback_enable:
+        layout.plot_state.enable_plot = True
+        layout.plot_state.playback.curr_index -= 4
+        if layout.plot_state.playback.curr_index < 0:
+            layout.plot_state.playback.curr_index = 0
+        layout.receive_data()
+        layout.plot_state.enable_plot = False
+
+        
 def _record_data(layout):
     layout.plot_state.playback_record = not layout.plot_state.playback_record
     if layout.plot_state.playback_record: 
         util.change_item_color(layout._record,  constants.ORANGE, constants.WHITE)
-        layout.plot_state.playback.create_file()
+        layout.plot_state.playback.create_file(layout.plot_state.playback_dir)
     else:
         util.change_item_color(layout._record,  constants.NORMAL_COLOR, constants.BLACK)
         layout.plot_state.playback.close_file()
