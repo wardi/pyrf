@@ -33,7 +33,7 @@ except ImportError:
     def inlineCallbacks(fn):
         pass
 
-WINDOW_WIDTH = 800
+WINDOW_WIDTH = 1400
 WINDOW_HEIGHT = 400
 
 class MainWindow(QtGui.QMainWindow):
@@ -634,7 +634,10 @@ class MainPanel(QtGui.QWidget):
         return stop
         
     def _playback_forward(self):
-        forward = QtGui.QPushButton('forward')
+        icon = QtGui.QIcon("Icons\forward.png");
+        forward = QtGui.QPushButton()
+        forward.setIconSize(QtCore.QSize(50,50)); 
+        forward.setIcon(icon)
         forward.clicked.connect(lambda: cu._forward_file(self))
         self.forward = forward
         return forward
