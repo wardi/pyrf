@@ -33,7 +33,7 @@ except ImportError:
     def inlineCallbacks(fn):
         pass
 
-WINDOW_WIDTH = 1400
+WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 400
 
 class MainWindow(QtGui.QMainWindow):
@@ -153,8 +153,7 @@ class MainPanel(QtGui.QWidget):
             return
 
         if self.plot_state.playback_enable:
-            start, stop, pow_ = self.plot_state.playback.read_data()
-            self.plot_state.update_freq_set(fstart = start, fstop = stop)
+            self.plot_state.fstart, self.plot_state.fstop, pow_ = self.plot_state.playback.read_data()
             self.update_freq_edit()
             self._reactor.callLater(0, self.receive_data)
         elif self.plot_state.trig_set:
@@ -166,7 +165,6 @@ class MainPanel(QtGui.QWidget):
             self.plot_state.playback.save_data(fstart,fstop,pow_)
         self.pow_data = pow_
         self.update_plot()
-
 
     def keyPressEvent(self, event):
         if self.dut:
@@ -198,7 +196,7 @@ class MainPanel(QtGui.QWidget):
         grid = QtGui.QGridLayout()
         grid.setSpacing(10)
         for x in range(8):
-            grid.setColumnMinimumWidth(x, 300)
+            grid.setColumnMinimumWidth(x, 1000)
         grid.setRowMinimumHeight(14, 800)
 
         # add plot widget
