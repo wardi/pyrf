@@ -5,7 +5,7 @@ import pyqtgraph as pg
 import gui_config as gui_state
 import constants
 from pyrf.util import read_data_and_context
-ICON_SIZE = 20
+constants.ICON_SIZE = 20
 def _center_plot_view(layout):
     """
     move the view to the center of the current FFT displayed
@@ -194,7 +194,7 @@ def _play_file(layout):
         if layout._playback_list.count() != 0:
             icon = QtGui.QIcon("Icons\Pause.png");
             layout._play.setIcon(icon) 
-            layout._play.setIconSize(QtCore.QSize(ICON_SIZE,ICON_SIZE));          
+            layout._play.setIconSize(QtCore.QSize(constants.ICON_SIZE,constants.ICON_SIZE));          
             layout.plot_state.selected_playback = layout._playback_list.currentItem()
             file_name = layout.plot_state.playback_dir + '\\' + layout.plot_state.selected_playback.text()
             layout.plot_state.playback.open_file(file_name)
@@ -204,12 +204,12 @@ def _play_file(layout):
         else:
             icon = QtGui.QIcon("Icons\Play.png");
             layout._play.setIcon(icon) 
-            layout._play.setIconSize(QtCore.QSize(ICON_SIZE,ICON_SIZE));  
+            layout._play.setIconSize(QtCore.QSize(constants.ICON_SIZE,constants.ICON_SIZE));  
             layout.plot_state.playback_enable = False
     else:
         icon = QtGui.QIcon("Icons\Play.png");
         layout._play.setIcon(icon) 
-        layout._play.setIconSize(QtCore.QSize(ICON_SIZE,ICON_SIZE));  
+        layout._play.setIconSize(QtCore.QSize(constants.ICON_SIZE,constants.ICON_SIZE));  
         layout.plot_state.enable_plot = False
 
 
@@ -240,10 +240,8 @@ def _rewind_file(layout):
 def _record_data(layout):
     layout.plot_state.playback_record = not layout.plot_state.playback_record
     if layout.plot_state.playback_record: 
-        util.change_item_color(layout._record,  constants.ORANGE, constants.WHITE)
         layout.plot_state.playback.create_file(layout.plot_state.playback_dir)
     else:
-        util.change_item_color(layout._record,  constants.NORMAL_COLOR, constants.BLACK)
         layout.plot_state.playback.close_file()
         util.update_playback_list(layout)
         
