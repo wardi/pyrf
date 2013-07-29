@@ -1,11 +1,11 @@
-from PySide import QtGui
+from PySide import QtGui, QtCore
 from pyrf.config import TriggerSettings
 import util
 import pyqtgraph as pg
 import gui_config as gui_state
 import constants
 from pyrf.util import read_data_and_context
-
+ICON_SIZE = 20
 def _center_plot_view(layout):
     """
     move the view to the center of the current FFT displayed
@@ -191,7 +191,10 @@ def _remove_file(layout):
 def _play_file(layout):
     layout.plot_state.playback_enable = not layout.plot_state.playback_enable
     if layout.plot_state.playback_enable:
-        if layout._playback_list.count() != 0: 
+        if layout._playback_list.count() != 0:
+            icon = QtGui.QIcon("Icons\Pause.png");
+            layout._play.setIcon(icon) 
+            layout._play.setIconSize(QtCore.QSize(ICON_SIZE,ICON_SIZE));          
             layout.plot_state.selected_playback = layout._playback_list.currentItem()
             file_name = layout.plot_state.playback_dir + '\\' + layout.plot_state.selected_playback.text()
             layout.plot_state.playback.open_file(file_name)
@@ -199,9 +202,14 @@ def _play_file(layout):
                 layout.plot_state.enable_plot = True
                 layout.receive_data()
         else:
-
+            icon = QtGui.QIcon("Icons\Play.png");
+            layout._play.setIcon(icon) 
+            layout._play.setIconSize(QtCore.QSize(ICON_SIZE,ICON_SIZE));  
             layout.plot_state.playback_enable = False
     else:
+        icon = QtGui.QIcon("Icons\Play.png");
+        layout._play.setIcon(icon) 
+        layout._play.setIconSize(QtCore.QSize(ICON_SIZE,ICON_SIZE));  
         layout.plot_state.enable_plot = False
 
 

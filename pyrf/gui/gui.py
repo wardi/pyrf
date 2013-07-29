@@ -15,8 +15,7 @@ from PySide import QtGui, QtCore
 import numpy as np
 import time
 from contextlib import contextmanager
-from util import find_max_index, find_nearest_index
-from util import hotkey_util
+from util import find_max_index, find_nearest_index,hotkey_util
 import constants
 import control_util as cu
 from plot_widget import plot
@@ -583,8 +582,9 @@ class MainPanel(QtGui.QWidget):
         second_row.addWidget(self._playback_play())
         second_row.addWidget(self._playback_stop())
         second_row.addWidget(self._playback_record())
-        second_row.addWidget(self._playback_forward())
         second_row.addWidget(self._playback_rewind())
+        second_row.addWidget(self._playback_forward())
+
 
         third_row = QtGui.QHBoxLayout()
         third_row.addWidget(self._playback_list())
@@ -613,37 +613,47 @@ class MainPanel(QtGui.QWidget):
         return load
     
     def _playback_play(self):
-        icon = QtGui.QIcon("Icons\Play.svg");
+
         play = QtGui.QPushButton()
+        icon = QtGui.QIcon("Icons\Play.png");
         play.setIcon(icon) 
-        play.setIconSize(QtCore.QSize(50,50));        
+        play.setIconSize(QtCore.QSize(constants.ICON_SIZE,constants.ICON_SIZE));        
         play.clicked.connect(lambda: cu._play_file(self))
         self._play = play
         return play
     
     def _playback_record(self):
-        record = QtGui.QPushButton('Record')
+        record = QtGui.QPushButton()
+        icon = QtGui.QIcon("Icons\Record.png");
+        record.setIcon(icon)
+        record.setIconSize(QtCore.QSize(constants.ICON_SIZE,constants.ICON_SIZE)); 
         record.clicked.connect(lambda: cu._record_data(self))
         self._record = record
         return record
         
     def _playback_stop(self):
-        stop = QtGui.QPushButton('Stop')
+        stop = QtGui.QPushButton()
+        icon = QtGui.QIcon("Icons\Stop.png");
+        stop.setIcon(icon)
+        stop.setIconSize(QtCore.QSize(constants.ICON_SIZE,constants.ICON_SIZE)); 
         stop.clicked.connect(lambda: cu._stop_file(self))
         self._stop = stop
         return stop
         
     def _playback_forward(self):
-        icon = QtGui.QIcon("Icons\forward.png");
         forward = QtGui.QPushButton()
-        forward.setIconSize(QtCore.QSize(50,50)); 
+        icon = QtGui.QIcon("Icons\Forward.png");
         forward.setIcon(icon)
+        forward.setIconSize(QtCore.QSize(constants.ICON_SIZE,constants.ICON_SIZE)); 
         forward.clicked.connect(lambda: cu._forward_file(self))
         self.forward = forward
         return forward
         
     def _playback_rewind(self):
-        rewind = QtGui.QPushButton('rewind')
+        rewind = QtGui.QPushButton()
+        icon = QtGui.QIcon("Icons\Rewind.png");
+        rewind.setIcon(icon)
+        rewind.setIconSize(QtCore.QSize(constants.ICON_SIZE,constants.ICON_SIZE)); 
         rewind.clicked.connect(lambda: cu._rewind_file(self))
         self._rewind = rewind
         return rewind

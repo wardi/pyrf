@@ -73,8 +73,8 @@ class playBack(object):
                 stop = float(freq_str[1])
             elif num_lines == self.curr_index + 1:
                 raw_data = str(line)
+                
             num_lines += 1
-
         split_data  = raw_data.split(', ')[0]
         split_data = split_data.split(',')
         filtered = [ x for x in split_data if x != '\n' ]

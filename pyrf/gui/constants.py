@@ -28,3 +28,6 @@ WHITE = 'rgb(255,255,255)'
 BLACK = 'rgb(0,0,0)'
 
 PRESSED_BUTTON = 'groove'
+
+# image size of button icons
+ICON_SIZE = 20
