@@ -217,7 +217,8 @@ def _stop_file(layout):
     layout.plot_state.playback_enable = False
     if not layout.plot_state.enable_plot:
                 layout.plot_state.enable_plot = True
-    layout.read_sweep()
+    if layout.dut:
+        layout.read_sweep()
     if layout.plot_state.playback.file_opened:
         layout.plot_state.playback.file_opened = False
         

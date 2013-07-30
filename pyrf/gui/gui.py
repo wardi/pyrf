@@ -526,7 +526,6 @@ class MainPanel(QtGui.QWidget):
         marker.setToolTip("[M]\nTurn Marker 1 on/off") 
         marker.clicked.connect(lambda: cu._marker_control(self))
         self._marker = marker
-        self.control_widgets.append(self._marker)
         return marker
         
     def _delta_control(self):
@@ -534,7 +533,6 @@ class MainPanel(QtGui.QWidget):
         delta.setToolTip("[K]\nTurn Marker 2 on/off") 
         delta.clicked.connect(lambda: cu._delta_control(self))
         self._delta = delta
-        self.control_widgets.append(self._delta)
         return delta
     
     def _peak_control(self):
@@ -542,7 +540,6 @@ class MainPanel(QtGui.QWidget):
         peak.setToolTip("[P]\nFind peak of the selected spectrum") 
         peak.clicked.connect(lambda: cu._find_peak(self))
         self._peak = peak
-        self.control_widgets.append(self._peak)
         return peak
         
     def _mhold_control(self):
@@ -550,7 +547,6 @@ class MainPanel(QtGui.QWidget):
         mhold.setToolTip("[H]\nTurn the Max Hold on/off") 
         mhold.clicked.connect(lambda: cu._mhold_control(self))
         self._mhold = mhold
-        self.control_widgets.append(self._mhold)
         return mhold
         
     def _center_control(self):
@@ -558,7 +554,6 @@ class MainPanel(QtGui.QWidget):
         center.setToolTip("[C]\nCenter the Plot View around the available spectrum") 
         center.clicked.connect(lambda: cu._center_plot_view(self))
         self._center_bt = center
-        self.control_widgets.append(self._center_bt)
         return center
         
     def _pause_control(self):
@@ -566,7 +561,6 @@ class MainPanel(QtGui.QWidget):
         pause.setToolTip("[Space Bar]\n pause the plot window") 
         pause.clicked.connect(lambda: cu._enable_plot(self))
         self._pause = pause
-        self.control_widgets.append(self._pause)
         return pause
     
     def _playback_control(self):
@@ -601,7 +595,6 @@ class MainPanel(QtGui.QWidget):
         load.setToolTip("Load Playback file directory") 
         load.clicked.connect(lambda: cu._change_playback_dir(self))
         self._load = load
-        self.control_widgets.append(self._load)
         return load
         
     def _remove_playback_item(self):
@@ -609,7 +602,6 @@ class MainPanel(QtGui.QWidget):
         load.setToolTip("Remove a playback file from the list bellow (the file will not be deleted from the computer") 
         load.clicked.connect(lambda: cu._remove_file(self))
         self._load = load
-        self.control_widgets.append(self._load)
         return load
     
     def _playback_play(self):
