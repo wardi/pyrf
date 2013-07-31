@@ -19,7 +19,7 @@ try:
                 },
             },
         'zipfile':None,
-        'windows':['wsa4000gui.py'],
+        'windows':['spectrumAnalyzerGUI.py'],
         })
 except ImportError:
     pass
@@ -60,7 +60,7 @@ setup(
     test_suite='pyrf.tests',
     entry_points={
         'gui_scripts': [
-            "wsa4000gui = pyrf.gui.wsa4000gui:main",
+            "spectrumAnalyzerGUI = pyrf.gui.spectrumAnalyzerGUI:main",
             ],
         },
     **extras

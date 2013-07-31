@@ -50,7 +50,7 @@ class plot_state(object):
         self.marker_sel = True
         util.change_item_color(layout._marker,  constants.ORANGE, constants.WHITE)
         layout._plot.add_marker()
-        layout._marker.setDown(True)
+        layout._marker.setChecked(False)
         layout.update_marker()
         if layout.plot_state.delta_sel:
             self.delta_sel = False
@@ -59,11 +59,9 @@ class plot_state(object):
             
 
     def disable_marker(self, layout):
-        
         self.marker = False
         self.marker_sel = False
-        util.change_item_color(layout._marker, constants.NORMAL_COLOR, constants.BLACK)
-        layout._marker.setDown(False)
+        layout._marker.setChecked(False)
         layout._plot.remove_marker()
         layout._marker_lab.setText('')
         layout._plot.center_view(layout.plot_state.center_freq, layout.plot_state.bandwidth)
@@ -73,9 +71,8 @@ class plot_state(object):
     def enable_delta(self, layout):
         self.delta = True
         self.delta_sel = True
-        util.change_item_color(layout._delta, constants.ORANGE, constants.WHITE)
         layout._plot.add_delta()
-        layout._delta.setDown(True)
+        layout._delta.setChecked(True)
         layout.update_delta()
         if self.marker:
             self.marker_sel = False             
@@ -85,8 +82,7 @@ class plot_state(object):
     def disable_delta(self, layout):
         self.delta = False
         self.delta_sel = False
-        util.change_item_color(layout._delta, constants.NORMAL_COLOR ,constants.BLACK)
-        layout._delta.setDown(False)
+        layout._delta.setChecked(False)
         layout._plot.remove_delta()
         layout._delta_lab.setText('')
         layout._diff_lab.setText('')

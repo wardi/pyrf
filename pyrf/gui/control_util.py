@@ -175,26 +175,35 @@ def _trigger_control(layout):
         _select_center_freq(layout)
 
 def _load_playback_dir(layout):
+    """
+    reload the playback list
+    """
     util.update_playback_list(layout)
 
 def _change_playback_dir(layout):
-
+    """
+    chose a new playback directory
+    """
     layout.plot_state.playback_dir = QtGui.QFileDialog.getExistingDirectory()
     util.update_playback_list(layout)
     
 def _remove_file(layout):
+    """
+    remove a file from the current playback list (will not delete from system)
+    """
     if layout._playback_list.count() != 0:
         list_item = layout._playback_list.currentItem()
         layout.plot_state.playback_ignore_list.append(list_item.text())
         layout._playback_list.takeItem(layout._playback_list.currentRow())
 
 def _play_file(layout):
+    """
+    play/pause a playback file
+    """
     layout.plot_state.playback_enable = not layout.plot_state.playback_enable
     if layout.plot_state.playback_enable:
         if layout._playback_list.count() != 0:
-            icon = QtGui.QIcon("Icons\Pause.png");
-            layout._play.setIcon(icon) 
-            layout._play.setIconSize(QtCore.QSize(constants.ICON_SIZE,constants.ICON_SIZE));          
+            util.change_icon(layout._play, "Pause.png")         
             layout.plot_state.selected_playback = layout._playback_list.currentItem()
             file_name = layout.plot_state.playback_dir + '\\' + layout.plot_state.selected_playback.text()
             layout.plot_state.playback.open_file(file_name)
@@ -202,25 +211,25 @@ def _play_file(layout):
                 layout.plot_state.enable_plot = True
                 layout.receive_data()
         else:
-            icon = QtGui.QIcon("Icons\Play.png");
-            layout._play.setIcon(icon) 
-            layout._play.setIconSize(QtCore.QSize(constants.ICON_SIZE,constants.ICON_SIZE));  
+            util.change_icon(layout._play, "Play.png")     
             layout.plot_state.playback_enable = False
     else:
-        icon = QtGui.QIcon("Icons\Play.png");
-        layout._play.setIcon(icon) 
-        layout._play.setIconSize(QtCore.QSize(constants.ICON_SIZE,constants.ICON_SIZE));  
+        util.change_icon(layout._play, "Play.png")      
         layout.plot_state.enable_plot = False
 
 
 def _stop_file(layout):
+    """
+    stop the current playback file being played, and return to reading from device if connected
+    """
     layout.plot_state.playback_enable = False
     if not layout.plot_state.enable_plot:
                 layout.plot_state.enable_plot = True
     if layout.dut:
-        layout.read_sweep()
+        layout.receive_data()
     if layout.plot_state.playback.file_opened:
         layout.plot_state.playback.file_opened = False
+    util.change_icon(layout._play, "Play.png")
         
 def _forward_file(layout):
     if layout.plot_state.playback_enable:
@@ -242,8 +251,10 @@ def _record_data(layout):
     layout.plot_state.playback_record = not layout.plot_state.playback_record
     if layout.plot_state.playback_record: 
         layout.plot_state.playback.create_file(layout.plot_state.playback_dir)
+        util.change_icon(layout._record, "Recording.png")
     else:
         layout.plot_state.playback.close_file()
+        util.change_icon(layout._record, "Record.png")
         util.update_playback_list(layout)
         
 hotkey_dict = {'1': _select_fstart,
