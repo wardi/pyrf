@@ -223,22 +223,34 @@ def _stop_file(layout):
     stop the current playback file being played, and return to reading from device if connected
     """
     layout.plot_state.playback_enable = False
+    layout.plot_state.playback_record = False   
     if not layout.plot_state.enable_plot:
                 layout.plot_state.enable_plot = True
     if layout.dut:
         layout.receive_data()
     if layout.plot_state.playback.file_opened:
         layout.plot_state.playback.file_opened = False
+    util.change_icon(layout._record, "Record.png")
     util.change_icon(layout._play, "Play.png")
-        
+    layout.plot_state.playback.close_file()
+    util.update_playback_list(layout)
+  
 def _forward_file(layout):
+    """
+    Pause a playback file and display the data next in line from the file
+    """
     if layout.plot_state.playback_enable:
         layout.plot_state.enable_plot = True
+        util.change_icon(layout._play, "Pause.png")   
         layout.receive_data()
         layout.plot_state.enable_plot = False
     
 def _rewind_file(layout):
+    """
+    Pause a playback file and display the previous data packetfrom the file
+    """
     if layout.plot_state.playback_enable:
+        util.change_icon(layout._play, "Pause.png")
         layout.plot_state.enable_plot = True
         layout.plot_state.playback.curr_index -= 4
         if layout.plot_state.playback.curr_index < 0:
@@ -259,8 +271,8 @@ def _record_data(layout):
         
 hotkey_dict = {'1': _select_fstart,
                 '2': _select_center_freq,
-                '3': _select_bw,
-                '4': _select_fstop,
+                '3': _select_fstop,
+                '4': _select_bw,
                 'UP KEY': _up_arrow_key, 
                 'DOWN KEY': _down_arrow_key,
                 'RIGHT KEY': _right_arrow_key,

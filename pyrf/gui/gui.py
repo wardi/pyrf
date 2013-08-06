@@ -152,7 +152,8 @@ class MainPanel(QtGui.QWidget):
             return
 
         if self.plot_state.playback_enable:
-            self.plot_state.fstart, self.plot_state.fstop, pow_ = self.plot_state.playback.read_data()
+            start, stop, pow_ = self.plot_state.playback.read_data()
+            self.plot_state.update_freq_set(fstart = start, fstop = stop)
             self.update_freq_edit()
             self._reactor.callLater(0, self.receive_data)
         elif self.plot_state.trig_set:
@@ -318,7 +319,7 @@ class MainPanel(QtGui.QWidget):
         fstop_hbox.addWidget(QtGui.QLabel('MHz'))
         
         freq_inc_hbox = QtGui.QHBoxLayout()
-        freq_inc_steps, freq_inc_minus, freq_inc_plus = self._freq_incr()
+        freq_inc_steps, freq_inc_plus, freq_inc_minus  = self._freq_incr()
         freq_inc_hbox.addWidget(freq_inc_minus)
         freq_inc_hbox.addWidget(freq_inc_steps)
         freq_inc_hbox.addWidget(freq_inc_plus)
@@ -330,8 +331,8 @@ class MainPanel(QtGui.QWidget):
         
         freq_layout.addLayout(fstart_hbox)
         freq_layout.addLayout(cfreq_hbox)
-        freq_layout.addLayout(bw_hbox)
         freq_layout.addLayout(fstop_hbox)
+        freq_layout.addLayout(bw_hbox)
         freq_layout.addLayout(freq_inc_hbox)
         freq_layout.addLayout(rbw_hbox)
         freq_group.setLayout(freq_layout)

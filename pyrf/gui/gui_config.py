@@ -137,7 +137,7 @@ class plot_state(object):
             if self.bin_size < 1:
                 self.bin_size = 1
         
-        elif fstart != None:
+        if fstart != None:
             if fstart >= self.fstop:
                 fstart = self.fstop - constants.MIN_BW
             self.fstart = fstart
@@ -147,7 +147,7 @@ class plot_state(object):
             if self.bin_size < 1:
                 self.bin_size = 1
                 
-        elif fstop != None:
+        if fstop != None:
             if fstop <= self.fstart:
                 fstop = self.fstart + constants.MIN_BW
             self.fstop = fstop
@@ -157,13 +157,13 @@ class plot_state(object):
             if self.bin_size < 1:
                 self.bin_size = 1
                 
-        elif rbw != None:
+        if rbw != None:
             self.rbw = rbw * 1e3
             self.bin_size = int((self.bandwidth) / self.rbw)
             if self.bin_size < 1:
                 self.bin_size = 1
         
-        elif bw != None:
+        if bw != None:
             if bw < constants.MIN_BW:
                 bw = constants.MIN_BW
             self.fstart = (self.center_freq - (bw / 2))
