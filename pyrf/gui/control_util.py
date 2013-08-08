@@ -1,3 +1,5 @@
+import os
+
 from PySide import QtGui, QtCore
 from pyrf.config import TriggerSettings
 import util
@@ -203,18 +205,18 @@ def _play_file(layout):
     layout.plot_state.playback_enable = not layout.plot_state.playback_enable
     if layout.plot_state.playback_enable:
         if layout._playback_list.count() != 0:
-            util.change_icon(layout._play, "Pause.png")         
+            util.change_icon(layout._play, "pause.png")         
             layout.plot_state.selected_playback = layout._playback_list.currentItem()
-            file_name = layout.plot_state.playback_dir + '\\' + layout.plot_state.selected_playback.text()
+            file_name = os.path.join(layout.plot_state.playback_dir, layout.plot_state.selected_playback.text())
             layout.plot_state.playback.open_file(file_name)
             if not layout.plot_state.enable_plot:
                 layout.plot_state.enable_plot = True
                 layout.receive_data()
         else:
-            util.change_icon(layout._play, "Play.png")     
+            util.change_icon(layout._play, "play.png")     
             layout.plot_state.playback_enable = False
     else:
-        util.change_icon(layout._play, "Play.png")      
+        util.change_icon(layout._play, "play.png")      
         layout.plot_state.enable_plot = False
 
 
@@ -230,8 +232,8 @@ def _stop_file(layout):
         layout.receive_data()
     if layout.plot_state.playback.file_opened:
         layout.plot_state.playback.file_opened = False
-    util.change_icon(layout._record, "Record.png")
-    util.change_icon(layout._play, "Play.png")
+    util.change_icon(layout._record, "record.png")
+    util.change_icon(layout._play, "play.png")
     if layout.plot_state.playback_record: 
         layout.plot_state.playback.close_file()
     util.update_playback_list(layout)
@@ -242,7 +244,7 @@ def _forward_file(layout):
     """
     if layout.plot_state.playback_enable:
         layout.plot_state.enable_plot = True
-        util.change_icon(layout._play, "Pause.png")   
+        util.change_icon(layout._play, "pause.png")   
         layout.receive_data()
         layout.plot_state.enable_plot = False
     
@@ -251,7 +253,7 @@ def _rewind_file(layout):
     Pause a playback file and display the previous data packetfrom the file
     """
     if layout.plot_state.playback_enable:
-        util.change_icon(layout._play, "Pause.png")
+        util.change_icon(layout._play, "pause.png")
         layout.plot_state.enable_plot = True
         layout.plot_state.playback.curr_index -= 4
         if layout.plot_state.playback.curr_index < 0:
@@ -264,10 +266,10 @@ def _record_data(layout):
     layout.plot_state.playback_record = not layout.plot_state.playback_record
     if layout.plot_state.playback_record: 
         layout.plot_state.playback.create_file(layout.plot_state.playback_dir)
-        util.change_icon(layout._record, "Recording.png")
+        util.change_icon(layout._record, "recording.png")
     else:
         layout.plot_state.playback.close_file()
-        util.change_icon(layout._record, "Record.png")
+        util.change_icon(layout._record, "record.png")
         util.update_playback_list(layout)
         
 hotkey_dict = {'1': _select_fstart,

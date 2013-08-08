@@ -62,7 +62,7 @@ def update_playback_list(layout):
         layout._playback_list.clear()
         for name in layout.plot_state.playback_file_list:
             if 'csv' in name and (name not in layout.plot_state.playback_ignore_list):
-                file = open(layout.plot_state.playback_dir + '\\' + name, 'r')
+                file = open(os.path.join(layout.plot_state.playback_dir, name), 'r')
                 header = file.readline()
                 if 'Pyrf' in header: 
                     layout._playback_list.addItem(name)
@@ -113,7 +113,7 @@ def disable_freq_cont(layout):
 
 def change_icon(bt,im):
     # change the specified button's icon
-    im_path = "Icons\\" + im 
+    im_path = os.path.join("Icons", im) 
     icon = QtGui.QIcon(im_path);
     bt.setIcon(icon)
     bt.setIconSize(QtCore.QSize(constants.ICON_SIZE,constants.ICON_SIZE)); 

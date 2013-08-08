@@ -1,5 +1,6 @@
 from PySide import QtCore
 import datetime
+import os
 
 LINES_PER_PACKET = 2
 class playBack(object):
@@ -26,7 +27,7 @@ class playBack(object):
         if fileName == None:
             fileName =  str(datetime.datetime.now()).replace('.', '-')
             fileName = fileName.replace(':','-')
-            fileName = dir + '\\' + fileName + '.csv'
+            fileName = os.path.join(dir, fileName + '.csv')
         
         self.file = QtCore.QFile(fileName)
         self.file.open(QtCore.QIODevice.WriteOnly| QtCore.QIODevice.Text)
