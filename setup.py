@@ -60,7 +60,7 @@ setup(
     test_suite='pyrf.tests',
     entry_points={
         'gui_scripts': [
-            "spectrumAnalyzerGUI = pyrf.gui.spectrumAnalyzerGUI:main",
+            "spectrumAnalyzerGUI = pyrf.gui.spectrum_analyzer:main",
             ],
         },
     **extras
