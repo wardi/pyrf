@@ -232,7 +232,8 @@ def _stop_file(layout):
         layout.plot_state.playback.file_opened = False
     util.change_icon(layout._record, "Record.png")
     util.change_icon(layout._play, "Play.png")
-    layout.plot_state.playback.close_file()
+    if layout.plot_state.playback_record: 
+        layout.plot_state.playback.close_file()
     util.update_playback_list(layout)
   
 def _forward_file(layout):
