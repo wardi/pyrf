@@ -92,7 +92,7 @@ class playBack(object):
         
         self.curr_index += LINES_PER_PACKET
         
-        if self.curr_index >= num_lines:
+        if self.curr_index >= num_lines - 2:
             self.curr_index = 0
         
         file.close()
